@@ -23,7 +23,7 @@ bool Widget::Rectangle::isClicked(sf::Event e, const sf::RenderWindow& window)
 {
 	if (isHovered(window))
 	{
-		if (e.type == sf::Event::MouseButtonPressed)
+		if (e.type == sf::Event::MouseButtonReleased)
 		{
 			return e.mouseButton.button == sf::Mouse::Left;
 		}
