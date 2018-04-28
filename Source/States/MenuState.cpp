@@ -8,7 +8,7 @@
 MenuState::MenuState(Game &game) :
 	BaseState(game),
 	menu(),
-	bgMusic(ResourceManager::getInstance().soundBuffers.get("are_we_alone")),
+	//bgMusic(ResourceManager::getInstance().soundBuffers.get("are_we_alone")),
 	texture(ResourceManager::getInstance().images.get("menu_background"))
 {
 	background.setTexture(texture);
@@ -47,8 +47,8 @@ MenuState::MenuState(Game &game) :
 	menu.addWidget(std::move(credits));
 	menu.addWidget(std::move(exit));
 
-	bgMusic.play();
-	bgMusic.setLoop(true);
+	//bgMusic.play();
+	//bgMusic.setLoop(true);
 }
 
 
