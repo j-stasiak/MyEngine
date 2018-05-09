@@ -14,19 +14,40 @@ TxtParser::~TxtParser()
 }
 
 
-bool TxtParser::fileExists()
+bool TxtParser::checkIfFileExists()
 {
-	return std::experimental::filesystem::exists(filePath);
+	if (!std::experimental::filesystem::exists(filePath))
+	{
+		LOG_ERROR("No file found under given directory: " + filePath);
+		return false;
+	}
+	return true;
 }
 
-/*std::string TxtParser::deleteComments(std::string line)
+std::string TxtParser::toUpper(std::string str)
 {
-	if (line.find('#') != std::string::npos)
+	std::transform(str.begin(), str.end(), str.begin(), [](char c) {
+		return std::toupper<unsigned char>(c, std::locale::classic());
+	});
+	return str;
+}
+
+std::string TxtParser::deleteComments(std::string line)
+{
+	std::size_t commentPosition = line.find('#');
+	if (commentPosition != std::string::npos)
 	{
-		return line;
+		line = line.substr(0, commentPosition);
 	}
-	else
+	return line;
+}
+
+std::string TxtParser::deleteSpaces(std::string line)
+{
+	line.erase(std::remove_if(line.begin(), line.end(), [](char c)
 	{
-		return line.substr(0, line.find('#') - 1);
-	}
-}*/
+		return std::isspace<char>(c, std::locale::classic());
+	}));
+
+	return line;
+}

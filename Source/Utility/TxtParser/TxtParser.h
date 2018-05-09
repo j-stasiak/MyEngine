@@ -32,43 +32,31 @@ public:
 	template<typename T>
 	T getProperty(const std::string &header, const std::string &key)
 	{
-		if (!fileExists())
+		if (!checkIfFileExists())
 		{
-			LOG_ERROR("File not found in " + filePath + "!");
 			return T();
 		}
 
 		std::ifstream file{ filePath };
 		std::string buffer = "";
-		T ret;
-
-		LOG_DEBUG("Starting getProperty method...");
 		
 		while (std::getline(file,buffer))
 		{
+			buffer = deleteSpaces(buffer);
+			buffer = deleteComments(buffer);
 
-			buffer.erase(std::remove_if(buffer.begin(), buffer.end(), [](char ch)
-			{
-				return std::isspace<char>(ch, std::locale::classic());
-			}));
-
-			if (buffer[0] == '[' && "[" + header + "]" == buffer)
+			if (buffer[0] == '[' && "[" + toUpper(header) + "]" == buffer)
 			{
 				while (std::getline(file, buffer))
 				{
 					if (std::isspace<char>(buffer[0], std::locale::classic()))
 					{
-						buffer.erase(std::remove_if(buffer.begin(), buffer.end(), [](char ch)
-						{
-							return std::isspace<char>(ch, std::locale::classic());
-						}));
+						buffer = deleteSpaces(buffer);
+						buffer = deleteComments(buffer);
 
 						if (buffer.substr(0, buffer.find('=')) == key)
 						{
-							LOG_DEBUG("Returning correct value!");
-							std::istringstream iss(buffer.substr(buffer.find('=') + 1, buffer.length() - buffer.find('=')));
-							iss >> std::dec >> ret;
-							return ret;
+							return convertStringToType<T>(buffer.substr(buffer.find('=') + 1, buffer.length() - buffer.find('=')));
 						}
 					}
 				}
@@ -82,8 +70,19 @@ public:
 
 private:
 	// Helper methods
-	bool fileExists();
-	//std::string deleteComments(std::string line);
+	bool checkIfFileExists();
+	std::string toUpper(std::string str);
+	std::string deleteComments(std::string line);
+	std::string deleteSpaces(std::string line);
+
+	template<typename T>
+	T convertStringToType(const std::string &str)
+	{
+		T ret;
+		std::istringstream iss(str);
+		iss >> std::dec >> ret;
+		return ret;
+	}
 
 	// Members
 	std::string filePath;
