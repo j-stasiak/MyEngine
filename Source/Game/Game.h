@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include <SFML\Graphics.hpp>
-#include "../Events/EventSystem.h"
+//#include "../Events/EventSystem.h"
 #include "../States/MenuState.h"
 
 const std::size_t MAX_FPS = 60;
