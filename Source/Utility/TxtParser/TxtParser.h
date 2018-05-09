@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TXTPARSER_H
+#define TXTPARSER_H
 
 #include "../Log/Log.h"
 #include <cctype>
@@ -88,3 +89,4 @@ private:
 	std::string filePath;
 	bool headerFound;
 };
+#endif //TXTPARSER_H
