@@ -1,24 +1,32 @@
 #include "Game.h"
 #include "../Utility/Log/Log.h"
+#include "../Utility/TxtParser/TxtParser.h"
 
 #include <GL/glew.h>
 #include <iostream>
 
 Game::Game() :
-	window				(),
+	window					(),
 	event					(),
 	clock					()
 	//m_map					(),
 	//event_context			(),
 	//event_context_manager	()
+
 {
 	sf::ContextSettings settings;
-	
+	TxtParser txtParser{ "res/settings/settings.txt" };
+
 	settings.majorVersion = 3;
 	settings.minorVersion = 3;
 	settings.depthBits = 24;
+	
+	unsigned int width = txtParser.getProperty<unsigned int>("window", "width");
+	unsigned int height = txtParser.getProperty<unsigned int>("window", "height");
+	std::string title = txtParser.getProperty<std::string>("window", "title");
+	
 
-	window.create(sf::VideoMode{ 1280, 720 }, "Project: D.O.F.F.", sf::Style::Default, settings);
+	window.create(sf::VideoMode{ width, height }, title, sf::Style::Default, settings);
 
 	glewExperimental = true;
 
