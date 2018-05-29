@@ -4,6 +4,8 @@
 #include "../Utility/Log/Log.h"
 #include "OptionsState.h"
 #include "PlayingState.h"
+#include "../GUI/Buttons/ButtonFactory.h"
+
 
 MenuState::MenuState(Game &game) :
 	BaseState(game),
@@ -13,33 +15,25 @@ MenuState::MenuState(Game &game) :
 {
 	background.setTexture(texture);
 
-	menu.setPostion({float(game.getWindow().getSize().x / 2), 
+	menu.setPostion({ float(game.getWindow().getSize().x / 2),
 		float(game.getWindow().getSize().y / 2) });
 
-	auto play = std::make_unique<SimpleButton>(SimpleButton::ButtonWidth::WIDE);
-	play->setFunction([&]() {
+	auto play = ButtonFactory::createButton([&]() {
 		bgMusic.stop();
 		game.addState<PlayingState>(game);
-	});
-	play->setText("Play");
+	}, "Play");
 
-	auto opts = std::make_unique<SimpleButton>(SimpleButton::ButtonWidth::WIDE);
-	opts->setFunction([]() {
+	auto opts = ButtonFactory::createButton([&]() {
 		LOG("Options button pressed!");
-	});
-	opts->setText("Options");
+	}, "Options");
 
-	auto credits = std::make_unique<SimpleButton>(SimpleButton::ButtonWidth::WIDE);
-	credits->setFunction([]() {
+	auto credits = ButtonFactory::createButton([&]() {
 		LOG("Credits button pressed!");
-	});
-	credits->setText("Credits");
+	}, "Credits");
 
-	auto exit = std::make_unique<SimpleButton>(SimpleButton::ButtonWidth::WIDE);
-	exit->setFunction([&game]() {
+	auto exit = ButtonFactory::createButton([&]() {
 		game.getWindow().close();
-	});
-	exit->setText("Exit");
+	}, "Exit");
 
 
 	menu.addWidget(std::move(play));
